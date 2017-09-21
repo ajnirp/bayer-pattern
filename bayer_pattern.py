@@ -74,21 +74,26 @@ demosaiced = demosaic(image)
 reference = plt.imread("crayons.jpg").astype(np.uint8)
 error_map = compute_error_map(reference, demosaiced)
 
-
 error_map = np.log(error_map)
-print(error_map)
+# print(error_map)
 
 fig, ax = plt.subplots()
 ax.set_title("Demosaiced image")
 ax.imshow(demosaiced.astype(np.uint8), interpolation="nearest")
+plt.savefig('demosaiced.jpg')
 
 fig, ax = plt.subplots()
 ax.set_title("Error map")
-cax = ax.imshow(error_map.astype(np.uint8), interpolation="nearest", cmap=cm.afmhot)
-plt.colorbar(cax, orientation='horizontal')
-# cbar = fig.colorbar(cax, ticks=[0, 10000, np.max(np.max(error_map))], orientation='horizontal')
-# cbar.ax.set_xticklabels(list(map(str, )))
+cax = ax.imshow(error_map, interpolation="nearest", cmap=cm.afmhot)
+# plt.colorbar(cax, orientation='horizontal')
+# fig.colorbar(cax)
+# cbar.ax.set_xticklabels(['Low', 'Medium', 'High'])
 
-# TODO: add colorbar to image, find max and average per-pixel errors, find an artifact-heavy region and explain errors
+max_err = np.max(np.max(error_map))
+
+total_err = np.sum(np.sum(error_map))
+avg_err = total_err / (len(error_map) * len(error_map[0]))
+
+print(max_err, avg_err)
 
 plt.show()
